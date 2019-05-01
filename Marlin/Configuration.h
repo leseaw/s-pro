@@ -131,6 +131,7 @@
 
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
+// #escope Trigorilla - 1.4 see config
 #ifndef MOTHERBOARD
   #define MOTHERBOARD BOARD_TRIGORILLA_14
 #endif
@@ -1003,7 +1004,7 @@
  * Normally G28 leaves leveling disabled on completion. Enable
  * this option to have G28 restore the prior leveling state.
  */
-// keep mesh active
+// #escope - keep mesh active
 #define RESTORE_LEVELING_AFTER_G28
 
 /**
@@ -1127,7 +1128,7 @@
 // #escope step size match Z resolution
 #if ENABLED(LCD_BED_LEVELING)
   #define MBL_Z_STEP 0.025    // Step size while manually probing Z axis.
-  #define LCD_PROBE_Z_RANGE 4 // Z Range centered on Z_MIN_POS for LCD Z adjustment
+  #define LCD_PROBE_Z_RANGE 2.5 // Z Range centered on Z_MIN_POS for LCD Z adjustment
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
