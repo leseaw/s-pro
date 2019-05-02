@@ -726,8 +726,9 @@
  * Use G29 repeatedly, adjusting the Z height at each point with movement commands
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
+// #escope should be more safe
 #define PROBE_MANUALLY
-//#define MANUAL_PROBE_START_Z 0.2
+#define MANUAL_PROBE_START_Z 0.2
 
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
@@ -898,13 +899,14 @@
 // @section machine
 
 // The size of the print bed
+// #escope - safe printing area
 #define X_BED_SIZE 200
 #define Y_BED_SIZE 200
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-// # new mount home
-#define X_MIN_POS -10
-#define Y_MIN_POS -5
+// #escope new mount home
+#define X_MIN_POS -11
+#define Y_MIN_POS -11
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
@@ -1081,8 +1083,8 @@
 
   #define MESH_EDIT_GFX_OVERLAY   // Display a graphics overlay while editing the mesh
 
-  #define MESH_INSET 1              // Set Mesh bounds as an inset region of the bed
-  #define GRID_MAX_POINTS_X 5      // Don't use more than 15 points per axis, implementation limited.
+  #define MESH_INSET 10              // Set Mesh bounds as an inset region of the bed
+  #define GRID_MAX_POINTS_X 4      // Don't use more than 15 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   #define UBL_MESH_EDIT_MOVES_Z     // Sophisticated users prefer no movement of nozzle
@@ -1096,8 +1098,8 @@
   //===========================================================================
   //=================================== Mesh ==================================
   //===========================================================================
-
-  #define MESH_INSET 20          // Set Mesh bounds as an inset region of the bed
+  // #escope define mesh geometry
+  #define MESH_INSET 10          // Set Mesh bounds as an inset region of the bed
   #define GRID_MAX_POINTS_X 5    // Don't use more than 7 points per axis, implementation limited.
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
@@ -1128,7 +1130,7 @@
 // #escope step size match Z resolution
 #if ENABLED(LCD_BED_LEVELING)
   #define MBL_Z_STEP 0.025    // Step size while manually probing Z axis.
-  #define LCD_PROBE_Z_RANGE 2.5 // Z Range centered on Z_MIN_POS for LCD Z adjustment
+  #define LCD_PROBE_Z_RANGE 2 // Z Range centered on Z_MIN_POS for LCD Z adjustment
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
@@ -1175,8 +1177,8 @@
 #endif
 
 // Homing speeds (mm/m)
-#define HOMING_FEEDRATE_XY (25*60)
-#define HOMING_FEEDRATE_Z  (4*60)
+#define HOMING_FEEDRATE_XY (30*60)
+#define HOMING_FEEDRATE_Z  (8*60)
 
 // @section calibrate
 
