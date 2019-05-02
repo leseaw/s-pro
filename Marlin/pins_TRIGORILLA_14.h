@@ -34,12 +34,18 @@
 #define FAN_PIN 9
 
 // FAN1 / D7  - Typically unused, can be allocated as Case Fan
+// #escope - FAN1 assigned for case fan
+#define FAN1_PIN 7
 
 // FAN2 / D44 - Typical Extruder Fan on Anycubic Delta devices
 #define FAN2_PIN              44
 #define ORIG_E0_AUTO_FAN_PIN  44
 
 #include "pins_RAMPS.h"
+
+// #escope use Z-MAX as FilRunoutSensorPIN
+#undef Z_MAX_PIN
+#define FIL_RUNOUT_PIN 19
 
 // TODO 1.4 boards do have an E1 stepper driver. However the pin definitions
 // from pins_RAMPS.h are incorrect for this board. e.g., Pin 44 is the Extruder fan.
