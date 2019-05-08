@@ -28,7 +28,12 @@
 
 #include "Marlin.h"
 
+extern unsigned char PowerTestFlag;
+extern char seekdataflag;
+
 #if ENABLED(SDSUPPORT)
+
+
 
 #define LONGEST_FILENAME (longFilename[0] ? longFilename : filename)
 
@@ -446,7 +451,10 @@ void CardReader::removeFile(char* name) {
   SdFile myDir;
   curDir = &root;
   char *fname = name;
-
+  PowerTestFlag=false;
+  seekdataflag=0;
+  WRITE(OUTAGECON_PIN,LOW);
+  FlagResumFromOutage=0;
   char *dirname_start, *dirname_end;
   if (name[0] == '/') {
     dirname_start = strchr(name, '/') + 1;
@@ -568,7 +576,10 @@ void CardReader::closefile(bool store_location) {
   file.sync();
   file.close();
   saving = logging = false;
-
+ WRITE(OUTAGECON_PIN,LOW);
+  PowerTestFlag=false;
+  seekdataflag=0;
+  FlagResumFromOutage=0;
   if (store_location) {
     //future: store printer state, filename and position for continuing a stopped print
     // so one can unplug the printer and continue printing the next day.
@@ -862,6 +873,10 @@ void CardReader::updir() {
 
 void CardReader::printingHasFinished() {
   stepper.synchronize();
+   PowerTestFlag=false;
+  seekdataflag=0;
+  WRITE(OUTAGECON_PIN,LOW);
+  FlagResumFromOutage=0;
   file.close();
   if (file_subcall_ctr > 0) { // Heading up to a parent file that called current as a procedure.
     file_subcall_ctr--;

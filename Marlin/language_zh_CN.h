@@ -208,22 +208,22 @@
 
 #if LCD_HEIGHT >= 4
 #define MSG_FILAMENT_CHANGE_INIT_1          _UxGT("等待开始")  //"Wait for start"
-#define MSG_FILAMENT_CHANGE_INIT_2          _UxGT("丝料")  //"of the filament"
-#define MSG_FILAMENT_CHANGE_INIT_3          _UxGT("变更")  //"change"
+#define MSG_FILAMENT_CHANGE_INIT_2          _UxGT("耗材")  //"of the filament"
+#define MSG_FILAMENT_CHANGE_INIT_3          _UxGT("更新")  //"change"
 #define MSG_FILAMENT_CHANGE_UNLOAD_1        _UxGT("等待")  //"Wait for"
-#define MSG_FILAMENT_CHANGE_UNLOAD_2        _UxGT("卸下丝料")  //"filament unload"
+#define MSG_FILAMENT_CHANGE_UNLOAD_2        _UxGT("耗材抽回")  //"filament unload"
 #define MSG_FILAMENT_CHANGE_UNLOAD_3        _UxGT("")  //""
-#define MSG_FILAMENT_CHANGE_INSERT_1        _UxGT("插入丝料")  //"Insert filament"
+#define MSG_FILAMENT_CHANGE_INSERT_1        _UxGT("插入耗材")  //"Insert filament"
 #define MSG_FILAMENT_CHANGE_INSERT_2        _UxGT("并按键")  //"and press button"
 #define MSG_FILAMENT_CHANGE_INSERT_3        _UxGT("来继续 ...")  //"to continue..."
 #define MSG_FILAMENT_CHANGE_LOAD_1          _UxGT("等待")  //"Wait for"
-#define MSG_FILAMENT_CHANGE_LOAD_2          _UxGT("进料")  //"filament load"
+#define MSG_FILAMENT_CHANGE_LOAD_2          _UxGT("耗材进入")  //"filament load"
 #define MSG_FILAMENT_CHANGE_LOAD_3          _UxGT("")  //""
 #define MSG_FILAMENT_CHANGE_EXTRUDE_1       _UxGT("等待")  //"Wait for"
-#define MSG_FILAMENT_CHANGE_EXTRUDE_2       _UxGT("丝料挤出")  //"filament extrude"
+#define MSG_FILAMENT_CHANGE_EXTRUDE_2       _UxGT("耗材挤出")  //"filament extrude"
 #define MSG_FILAMENT_CHANGE_EXTRUDE_3       _UxGT("")  //""
 #define MSG_FILAMENT_CHANGE_RESUME_1        _UxGT("等待打印")  //"Wait for print"
-#define MSG_FILAMENT_CHANGE_RESUME_2        _UxGT("恢复")  //"to resume"
+#define MSG_FILAMENT_CHANGE_RESUME_2        _UxGT("恢复打印")  //"to resume"
 #define MSG_FILAMENT_CHANGE_RESUME_3        _UxGT("")  //""
 
 #else // LCD_HEIGHT < 4
@@ -235,4 +235,6 @@
 #define MSG_FILAMENT_CHANGE_RESUME_1        _UxGT("恢复中 ...")  //"Resuming..."
 #endif // LCD_HEIGHT < 4
 
+#define MSG_OUTAGE _UxGT ("断电续打")  //断电续打
+#define  MSG_SET ("设定")   //设定
 #endif // LANGUAGE_ZH_CN_H

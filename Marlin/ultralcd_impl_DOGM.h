@@ -78,12 +78,14 @@
   #if ENABLED(DISPLAY_CHARSET_ISO10646_1)
     #include "dogm_font_data_ISO10646_1.h"
     #define FONT_MENU_NAME ISO10646_1_5x7
+    #define FONT_ADDING_NAME ISO10646_1_5x7
   #elif ENABLED(DISPLAY_CHARSET_ISO10646_PL)
     #include "dogm_font_data_ISO10646_1_PL.h"
     #define FONT_MENU_NAME ISO10646_1_PL_5x7
   #elif ENABLED(DISPLAY_CHARSET_ISO10646_5)
     #include "dogm_font_data_ISO10646_5_Cyrillic.h"
     #define FONT_MENU_NAME ISO10646_5_Cyrillic_5x7
+    #define FONT_ADDING_NAME ISO10646_5_Cyrillic_5x7
   #elif ENABLED(DISPLAY_CHARSET_ISO10646_KANA)
     #include "dogm_font_data_ISO10646_Kana.h"
     #define FONT_MENU_NAME ISO10646_Kana_5x7
@@ -93,6 +95,7 @@
   #elif ENABLED(DISPLAY_CHARSET_ISO10646_CN)
     #include "dogm_font_data_ISO10646_CN.h"
     #define FONT_MENU_NAME ISO10646_CN
+    #define FONT_ADDING_NAME chinese_outage
     #define TALL_FONT_CORRECTION 1
   #elif ENABLED(DISPLAY_CHARSET_ISO10646_TR)
     #include "dogm_font_data_ISO10646_1_tr.h"
@@ -116,7 +119,7 @@
     #define FONT_MENU_NAME HD44780_C_5x7
   #else // fall-back
     #include "dogm_font_data_ISO10646_1.h"
-    #define FONT_MENU_NAME ISO10646_1_5x7
+    #define FONT_MENU_NAME ISO10646_1_5x7    
   #endif
 #endif // SIMULATE_ROMFONT
 
@@ -126,6 +129,7 @@
 #define FONT_SPECIAL 2
 #define FONT_MENU_EDIT 3
 #define FONT_MENU 4
+#define FONT_ADDING 5
 
 // DOGM parameters (size in pixels)
 #define DOG_CHAR_WIDTH         6
@@ -218,6 +222,7 @@ static void lcd_setFont(const char font_nr) {
     case FONT_MENU       : {u8g.setFont(FONT_MENU_NAME); currentfont = FONT_MENU;}; break;
     case FONT_SPECIAL    : {u8g.setFont(FONT_SPECIAL_NAME); currentfont = FONT_SPECIAL;}; break;
     case FONT_MENU_EDIT  : {u8g.setFont(FONT_MENU_EDIT_NAME); currentfont = FONT_MENU_EDIT;}; break;
+    case FONT_ADDING     : {u8g.setFont(FONT_ADDING_NAME); currentfont = FONT_ADDING;}; break;
     break;
   }
 }
@@ -268,11 +273,11 @@ void lcd_printPGM_utf(const char *str, uint8_t n=LCD_WIDTH) {
       do {
         u8g.drawBitmapP(
           (128 - (CUSTOM_BOOTSCREEN_BMPWIDTH))  /2,
-          ( 64 - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) /2,
+         ( 64 - (CUSTOM_BOOTSCREEN_BMPHEIGHT)) /2,
           CEILING(CUSTOM_BOOTSCREEN_BMPWIDTH, 8), CUSTOM_BOOTSCREEN_BMPHEIGHT, custom_start_bmp);
       } while (u8g.nextPage());
     }
-
+    }
   #endif // SHOW_CUSTOM_BOOTSCREEN
 
   void lcd_bootscreen() {
@@ -293,15 +298,7 @@ void lcd_printPGM_utf(const char *str, uint8_t n=LCD_WIDTH) {
 
       u8g.firstPage();
       do {
-        u8g.drawBitmapP(offx, offy, START_BMPBYTEWIDTH, START_BMPHEIGHT, start_bmp);
-        lcd_setFont(FONT_MENU);
-        #ifndef STRING_SPLASH_LINE2
-          u8g.drawStr(txt1X, u8g.getHeight() - (DOG_CHAR_HEIGHT), STRING_SPLASH_LINE1);
-        #else
-          const uint8_t txt2X = (u8g.getWidth() - (sizeof(STRING_SPLASH_LINE2) - 1) * (DOG_CHAR_WIDTH)) / 2;
-          u8g.drawStr(txt1X, u8g.getHeight() - (DOG_CHAR_HEIGHT) * 3 / 2, STRING_SPLASH_LINE1);
-          u8g.drawStr(txt2X, u8g.getHeight() - (DOG_CHAR_HEIGHT) * 1 / 2, STRING_SPLASH_LINE2);
-        #endif
+        u8g.drawXBMP( (128-START_BMPWIDTH)/2, 0, START_BMPWIDTH, START_BMPHEIGHT, start_bmp);
       } while (u8g.nextPage());
     }
   }

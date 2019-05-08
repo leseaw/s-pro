@@ -46,6 +46,8 @@
   void kill_screen(const char* lcd_msg);
   bool lcd_detected(void);
 
+  extern  char FlagResumFromOutage;
+
   extern uint8_t lcdDrawUpdate;
   inline void lcd_refresh() { lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; }
 

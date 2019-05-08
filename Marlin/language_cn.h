@@ -32,8 +32,8 @@
 
 #define DISPLAY_CHARSET_ISO10646_CN
 
-#define WELCOME_MSG                         "\xa4\xa5\xa6\xa7"
-#define MSG_SD_INSERTED                     "\xa8\xa9\xaa\xab"
+#define WELCOME_MSG                "\xa4\xa5\xa6\xa7"
+#define MSG_SD_INSERTED              "\xa8\xa9\xaa\xab"
 #define MSG_SD_REMOVED                      "\xa8\xa9\xac\xad"
 #define MSG_MAIN                            "\xae\xaf\xb0"
 #define MSG_AUTOSTART                       "\xb1\xb2\xb3\xb4"
@@ -124,7 +124,7 @@
 #define MSG_PAUSE_PRINT                     "\xf1\xf2\xca\xf3"
 #define MSG_RESUME_PRINT                    "\xf4\xf5\xca\xf3"
 #define MSG_STOP_PRINT                      "\xf2\xf6\xca\xf3"
-#define MSG_CARD_MENU                       "\xaf\xb0"
+#define MSG_CARD_MENU                     "\xf7\xe6\xf8\xa8"//由存储卡    // "\xaf\xb0"//菜单
 #define MSG_NO_CARD                         "\xf9\xa8"
 #define MSG_DWELL                           "Sleep..."
 #define MSG_USERWAIT                        "Wait for user..."
@@ -163,5 +163,30 @@
 #define MSG_DELTA_CALIBRATE_Y               "Calibrate Y"
 #define MSG_DELTA_CALIBRATE_Z               "Calibrate Z"
 #define MSG_DELTA_CALIBRATE_CENTER          "Calibrate Center"
+
+#define MSG_FILAMENT_CHANGE_INIT_1 "\xfc\xfd\x88\x88\x88"     //等待
+#define MSG_FILAMENT_CHANGE_INIT_2 "\xe0\xe1\xea\xeb\x88\x88\x88\x88\x88\x88" //耗材更新
+//#define MSG_FILAMENT_CHANGE_INIT_3 "\xea\xeb" //更新
+#define MSG_FILAMENT_CHANGE_UNLOAD_1 "\xfc\xfd\x88\x88\x88" //等待
+#define MSG_FILAMENT_CHANGE_UNLOAD_2 "\xe0\xe1\xcd\xad\x88\x88\x88\x88\x88\x88"//耗材抽回
+#define MSG_FILAMENT_CHANGE_INSERT_1 "\xaa\xab\xe0\xe1\x88\x88\x88\x88\x88\x88" //插入耗材
+
+
+//add by jolly@anycubic3d.com
+#define MSG_FILAMENT_CHANGE_OPTION_RESUME "\xe7\xe8\xca\xf3"//恢复打印
+#define MSG_FILAMENT_CHANGE_OPTION_EXTRUDE "\xf4\xf5\xcc\xad"//继续挤出
+
+#define MSG_FILAMENT_CHANGE_LOAD_1  "\xfc\xfd\x88\x88\x88"//等待
+#define MSG_FILAMENT_CHANGE_LOAD_2  "\xe0\xe1\xb7\xab\x88\x88\x88\x88\x88\x88\x88"//耗材进入
+
+#define MSG_FILAMENT_CHANGE_EXTRUDE_1 "\xfc\xfd\x88\x88\x88"//等待
+#define MSG_FILAMENT_CHANGE_EXTRUDE_2  "\xe0\xe1\xcc\xad\x88\x88\x88\x88\x88\x88"//耗材挤出
+
+#define MSG_FILAMENT_CHANGE_RESUME_1  "\xfc\xfd\x88\x88\x88"//等待
+#define MSG_FILAMENT_CHANGE_RESUME_2  "\xe7\xe8\xca\xf3\x88\x88\x88\x88\x88\x88"//恢复打印
+
+
+#define MSG_OUTAGE "\x0a\x0b\x0c\x0d"  //断电续打
+#define  MSG_SET "\x10\x0e\x0f"    //设定
 
 #endif // LANGUAGE_CN_H

@@ -246,4 +246,11 @@
   #define MSG_FILAMENT_CHANGE_RESUME_1        _UxGT("Fortsætter...")
 #endif // LCD_HEIGHT < 4
 
+ #ifndef MSG_OUTAGE
+    #define MSG_OUTAGE "Resume from outage"  //断电续打
+ #endif
+  #ifndef MSG_SET   
+    #define  MSG_SET "Setting"    //设定
+ #endif
+
 #endif // LANGUAGE_DA_H

@@ -185,6 +185,8 @@ MarlinSettings settings;
 #include "ultralcd.h"
 #include "stepper.h"
 
+#include "cardreader.h"
+
 #if ENABLED(INCH_MODE_SUPPORT) || (ENABLED(ULTIPANEL) && ENABLED(TEMPERATURE_UNITS_SUPPORT))
   #include "gcode.h"
 #endif
@@ -252,6 +254,31 @@ void MarlinSettings::postprocess() {
 }
 
 #if ENABLED(EEPROM_SETTINGS)
+uint16_t eeprom_checksum;
+void _EEPROM_writeData(int &pos, uint8_t* value, uint8_t size) {
+  uint8_t c;
+  while (size--) {
+    eeprom_write_byte((unsigned char*)pos, *value);
+    c = eeprom_read_byte((unsigned char*)pos);
+    if (c != *value) {
+       SERIAL_ECHO_START();
+      SERIAL_ECHOLNPGM(MSG_ERR_EEPROM_WRITE);
+    }
+    eeprom_checksum += c;
+    pos++;
+    value++;
+  };
+}
+void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size) {
+  do {
+    uint8_t c = eeprom_read_byte((unsigned char*)pos);
+    *value = c;
+    eeprom_checksum += c;
+    pos++;
+    value++;
+  } while (--size);
+}
+
 
   #define DUMMY_PID_VALUE 3000.0f
   #define EEPROM_START() int eeprom_index = EEPROM_OFFSET
@@ -260,7 +287,47 @@ void MarlinSettings::postprocess() {
   #define EEPROM_READ(VAR) read_data(eeprom_index, (uint8_t*)&VAR, sizeof(VAR), &working_crc)
   #define EEPROM_ASSERT(TST,ERR) if (!(TST)) do{ SERIAL_ERROR_START(); SERIAL_ERRORLNPGM(ERR); eeprom_read_error = true; }while(0)
 
+  #define EEPROM_WRITE_VAR(pos, value) _EEPROM_writeData(pos, (uint8_t*)&value, sizeof(value))
+  #define EEPROM_READ_VAR(pos, value) _EEPROM_readData(pos, (uint8_t*)&value, sizeof(value))
+
   const char version[4] = EEPROM_VERSION;
+
+
+float last_position[4]={0.0,0.0,0.0,0.0};
+long last_sd_position[1]={0};
+void OutageSave()
+{
+  char ver[4]="000";
+  int j=20;
+  EEPROM_WRITE_VAR(j,ver);
+  last_sd_position[0]=card.GetLastSDpos();
+  last_position[0]=current_position[E_AXIS];
+  last_position[1]=current_position[Z_AXIS];
+  last_position[2]=current_position[Y_AXIS];
+  last_position[3]=current_position[X_AXIS]; 
+  
+  EEPROM_WRITE_VAR(j,last_sd_position[0]);
+  EEPROM_WRITE_VAR(j,last_position[0]); //E 
+  EEPROM_WRITE_VAR(j,last_position[1]); //Z
+  EEPROM_WRITE_VAR(j,last_position[2]); //Y
+  EEPROM_WRITE_VAR(j,last_position[3]);  //X
+}
+
+
+void OutageRead()
+{
+    int i=20;
+    char stored_ver[4];
+    char ver[4]=EEPROM_VERSION; 
+    EEPROM_READ_VAR(i,stored_ver);  
+    EEPROM_READ_VAR(i,last_sd_position[0]);  
+    EEPROM_READ_VAR(i,last_position[0]); //E
+    EEPROM_READ_VAR(i,last_position[1]); //Z
+    EEPROM_READ_VAR(i,last_position[2]); //Y
+    EEPROM_READ_VAR(i,last_position[3]); //X
+}
+
+  
 
   bool MarlinSettings::eeprom_error;
 

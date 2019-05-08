@@ -250,4 +250,11 @@
 #define MSG_FILAMENT_CHANGE_RESUME_1        _UxGT("Aguardando impre.")
 #define MSG_FILAMENT_CHANGE_RESUME_2        _UxGT("pa continar")
 
+ #ifndef MSG_OUTAGE
+    #define MSG_OUTAGE "Resume from outage"  //断电续打
+ #endif
+  #ifndef MSG_SET   
+    #define  MSG_SET "Setting"    //设定
+ #endif
+
 #endif // LANGUAGE_AN_H

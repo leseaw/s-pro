@@ -50,7 +50,7 @@
  * G2   - CW ARC
  * G3   - CCW ARC
  * G4   - Dwell S<seconds> or P<milliseconds>
- * G5   - Cubic B-spline with XYZE destination and IJPQ offsets
+ * G5   - Resume from outage
  * G10  - Retract filament according to settings of M207 (Requires FWRETRACT)
  * G11  - Retract recover filament according to settings of M208 (Requires FWRETRACT)
  * G12  - Clean tool (Requires NOZZLE_CLEAN_FEATURE)
@@ -258,6 +258,7 @@
 #include "types.h"
 #include "gcode.h"
 
+
 #if HAS_ABL
   #include "vector_3.h"
   #if ENABLED(AUTO_BED_LEVELING_LINEAR)
@@ -348,6 +349,16 @@
                            && ubl.z_values[0][0] == 0 && ubl.z_values[1][0] == 0 && ubl.z_values[2][0] == 0 )  \
                            || isnan(ubl.z_values[0][0]))
 #endif
+
+
+
+int PowerInt= 6;//
+unsigned char PowerTestFlag=false;
+unsigned char ResumingFlag=0;
+char seekdataflag=0;
+
+
+
 
 bool Running = true;
 
@@ -734,6 +745,35 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s=0.0, bool no_mo
 void report_current_position();
 void report_current_position_detail();
 
+void SetUpFAN2_PIN()
+{
+    SET_OUTPUT(V5_COOLING_PIN);
+    WRITE(V5_COOLING_PIN, LOW);  
+}
+
+void Fan2Scan()
+{
+  if(thermalManager.degHotend(0)>65)
+  WRITE(V5_COOLING_PIN, HIGH);
+  else WRITE(V5_COOLING_PIN, LOW);
+}
+
+
+void PowerKill()
+{
+   if(PowerTestFlag==true)
+   {
+      thermalManager.disable_all_heaters();
+      disable_X();
+      disable_Y();
+      disable_Z();
+      disable_E0();
+      OutageSave();
+      PowerTestFlag=false;
+   }
+}
+
+
 #if ENABLED(DEBUG_LEVELING_FEATURE)
   void print_xyz(const char* prefix, const char* suffix, const float x, const float y, const float z) {
     serialprintPGM(prefix);
@@ -883,6 +923,16 @@ bool enqueue_and_echo_command(const char* cmd, bool say_ok/*=false*/) {
     return true;
   }
   return false;
+}
+
+void setup_OutageTestPin()
+{
+
+  pinMode(OUTAGETEST_PIN,INPUT);
+//  WRITE(OUTAGETEST_PIN,HIGH);
+  pinMode(OUTAGECON_PIN,OUTPUT);
+  WRITE(OUTAGECON_PIN,LOW);
+
 }
 
 void setup_killpin() {
@@ -1225,7 +1275,7 @@ inline void get_serial_commands() {
   inline void get_sdcard_commands() {
     static bool stop_buffering = false,
                 sd_comment_mode = false;
-
+   char i,j;
     if (!card.sdprinting) return;
 
     /**
@@ -1239,7 +1289,7 @@ inline void get_serial_commands() {
 
     uint16_t sd_count = 0;
     bool card_eof = card.eof();
-    while (commands_in_queue < BUFSIZE && !card_eof && !stop_buffering) {
+    while (commands_in_queue < BUFSIZE && !card_eof && !stop_buffering&&!seekdataflag) {
       const int16_t n = card.get();
       char sd_char = (char)n;
       card_eof = card.eof();
@@ -1288,6 +1338,24 @@ inline void get_serial_commands() {
         if (!sd_comment_mode) command_queue[cmd_queue_index_w][sd_count++] = sd_char;
       }
     }
+  if(seekdataflag)
+ {             
+      for(i=0;i<MAX_CMD_SIZE;i++) //clean buf
+      {
+      for(j=0;j<BUFSIZE;j++)
+      {
+        command_queue[j][i]=0; 
+      }                     
+      } 
+    planner.buffer_line (X_MIN_POS,Y_MIN_POS,last_position[1],last_position[0],feedrate_percentage,active_extruder);           
+    planner.set_e_position_mm(last_position[0]);
+    destination[X_AXIS]=last_position[3]; //SET A NEW ORIGNAL COORDINATE    
+     destination[Y_AXIS]=last_position[2];
+     if(current_position[Z_AXIS]>0.3) current_position[Z_AXIS]=last_position[1]-0.1;
+     else current_position[Z_AXIS]=last_position[1];           
+      feedrate_mm_s=MMM_TO_MMS(2000.0);
+    seekdataflag=0;
+    }       
   }
 
 #endif // SDSUPPORT
@@ -3399,6 +3467,11 @@ inline void gcode_G0_G1(
       }
     #endif // FWRETRACT
 
+ if((ResumingFlag==1)&&FlagResumFromOutage)
+    {
+      if(destination[E_AXIS]<20)return;
+    }    
+
     #if IS_SCARA
       fast_move ? prepare_uninterpolated_move_to_destination() : prepare_move_to_destination();
     #else
@@ -3520,8 +3593,6 @@ inline void gcode_G4() {
   dwell(dwell_ms);
 }
 
-#if ENABLED(BEZIER_CURVE_SUPPORT)
-
   /**
    * Parameters interpreted according to:
    * http://linuxcnc.org/docs/2.6/html/gcode/gcode.html#sec:G5-Cubic-Spline
@@ -3532,23 +3603,28 @@ inline void gcode_G4() {
   /**
    * G5: Cubic B-spline
    */
-  inline void gcode_G5() {
-    if (IsRunning()) {
-
-      gcode_get_destination();
-
-      const float offset[] = {
-        parser.linearval('I'),
-        parser.linearval('J'),
-        parser.linearval('P'),
-        parser.linearval('Q')
-      };
-
-      plan_cubic_move(offset);
-    }
+  inline void gcode_G5() 
+  {//G5 RESUME FROM OUTAGE
+    
+       WRITE(OUTAGECON_PIN,HIGH);
+      if(FlagResumFromOutage)
+      {                
+          OutageRead(); 
+          if(last_sd_position[0]>100)
+          last_sd_position[0]=last_sd_position[0]-5;
+          card.setIndex(last_sd_position[0]);         
+          seekdataflag=1;  
+           ResumingFlag=1;     
+          FlagResumFromOutage=0;   
+         fanSpeeds[0]=255;   //OPEN FAN0     
+      }     
+      if(1==READ(OUTAGETEST_PIN))
+      {
+         PowerTestFlag=true;
+         attachInterrupt(PowerInt,PowerKill,CHANGE);     //INITIANAL SET           
   }
+ }
 
-#endif // BEZIER_CURVE_SUPPORT
 
 #if ENABLED(FWRETRACT)
 
@@ -7264,7 +7340,7 @@ inline void gcode_M104() {
     #endif
 
     if (parser.value_celsius() > thermalManager.degHotend(target_extruder))
-      lcd_status_printf_P(0, PSTR("E%i %s"), target_extruder + 1, MSG_HEATING);
+      lcd_status_printf_P(0, PSTR("Nozzle %s"), MSG_HEATING);
   }
 
   #if ENABLED(AUTOTEMP)
@@ -7483,7 +7559,7 @@ inline void gcode_M109() {
         print_job_timer.start();
     #endif
 
-    if (thermalManager.isHeatingHotend(target_extruder)) lcd_status_printf_P(0, PSTR("E%i %s"), target_extruder + 1, MSG_HEATING);
+    if (thermalManager.isHeatingHotend(target_extruder)) lcd_status_printf_P(0, PSTR("Nozzle %s"), MSG_HEATING);
   }
   else return;
 
@@ -10825,12 +10901,9 @@ void process_next_command() {
       case 4:
         gcode_G4();
         break;
-
-      #if ENABLED(BEZIER_CURVE_SUPPORT)
-        case 5: // G5: Cubic B_spline
+        case 5: // G5: resume from outage
           gcode_G5();
           break;
-      #endif // BEZIER_CURVE_SUPPORT
 
       #if ENABLED(FWRETRACT)
         case 10: // G10: retract
@@ -13029,10 +13102,16 @@ void disable_all_steppers() {
  *  - Check if an idle but hot extruder needs filament extruded (EXTRUDER_RUNOUT_PREVENT)
  */
 void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
-
+  static unsigned int interferCouter=0;
   #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-    if ((IS_SD_PRINTING || print_job_timer.isRunning()) && (READ(FIL_RUNOUT_PIN) == FIL_RUNOUT_INVERTING))
-      handle_filament_runout();
+  //  if ((IS_SD_PRINTING || print_job_timer.isRunning()) && (READ(FIL_RUNOUT_PIN) == FIL_RUNOUT_INVERTING))
+  if (READ(FIL_RUNOUT_PIN) == FIL_RUNOUT_INVERTING)
+  {
+    interferCouter++;
+    if(interferCouter>8000){handle_filament_runout();interferCouter=0;}
+   }
+   else interferCouter=0;
+      
   #endif
 
   if (commands_in_queue < BUFSIZE) get_available_commands();
@@ -13210,7 +13289,7 @@ void idle(
   #endif  // MAX7219_DEBUG
 
   lcd_update();
-
+  Fan2Scan();
   host_keepalive();
 
   #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
@@ -13402,6 +13481,9 @@ void setup() {
 
   stepper.init();    // Initialize stepper, this enables interrupts!
   servo_init();
+
+  setup_OutageTestPin();
+  SetUpFAN2_PIN();
 
   #if HAS_PHOTOGRAPH
     OUT_WRITE(PHOTOGRAPH_PIN, LOW);

@@ -25,6 +25,12 @@
 
 #include "MarlinConfig.h"
 
+static bool RestartFlag=false;
+void OutageSave();
+void OutageRead();
+extern float last_position[4];
+extern long last_sd_position[1];
+
 class MarlinSettings {
   public:
     MarlinSettings() { }

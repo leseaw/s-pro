@@ -31,6 +31,9 @@
 #include "configuration_store.h"
 #include "utility.h"
 
+char FlagResumFromOutage=0;
+extern unsigned char ResumingFlag;
+
 #if HAS_BUZZER && DISABLED(LCD_USE_I2C_BUZZER)
   #include "buzzer.h"
 #endif
@@ -67,6 +70,7 @@ int16_t lcd_preheat_hotend_temp[2], lcd_preheat_bed_temp[2], lcd_preheat_fan_spe
 
 uint8_t lcd_status_message_level;
 char lcd_status_message[3 * (LCD_WIDTH) + 1] = WELCOME_MSG; // worst case is kana with up to 3*LCD_WIDTH+1
+
 
 #if ENABLED(STATUS_MESSAGE_SCROLLING)
   uint8_t status_scroll_pos = 0;
@@ -123,6 +127,10 @@ uint16_t max_display_update_time = 0;
   void lcd_control_temperature_preheat_material2_settings_menu();
   void lcd_control_motion_menu();
   void lcd_control_filament_menu();
+
+  
+static void lcd_Outage();
+static void lcd_set();
 
   #if ENABLED(LCD_INFO_MENU)
     #if ENABLED(PRINTCOUNTER)
@@ -885,6 +893,36 @@ void kill_screen(const char* lcd_msg) {
 
   #endif
 
+
+static void lcd_set()
+{
+ 
+    START_MENU();            
+    if(card.cardOK){
+    FlagResumFromOutage=true;
+    ResumingFlag=true;
+    }
+    MENU_ITEM(back, MSG_MAIN, lcd_main_menu);  
+    END_MENU();    
+    
+}
+
+static void lcd_Outage()
+{  
+    START_MENU();      
+    MENU_ITEM(back, MSG_MAIN, lcd_main_menu);       
+    if(card.cardOK){  
+      lcd_setFont(FONT_ADDING);      
+    MENU_ITEM(function,MSG_SET,lcd_set);  
+    lcd_setFont(FONT_MENU);   
+}
+    else{    
+      MENU_ITEM(submenu, MSG_NO_CARD, lcd_sdcard_menu);}    
+    END_MENU();      
+}
+
+
+
   /**
    *
    * "Main" menu
@@ -924,6 +962,11 @@ void kill_screen(const char* lcd_msg) {
       MENU_ITEM(submenu, MSG_PREPARE, lcd_prepare_menu);
     }
     MENU_ITEM(submenu, MSG_CONTROL, lcd_control_menu);
+    
+//////////////////////////////////////////////////////断电续打
+    lcd_setFont(FONT_ADDING);
+    MENU_ITEM(submenu, MSG_OUTAGE, lcd_Outage);
+    lcd_setFont(FONT_MENU);
 
     #if ENABLED(SDSUPPORT)
       if (card.cardOK) {
@@ -2475,7 +2518,7 @@ void kill_screen(const char* lcd_msg) {
       //
       // Set Home Offsets
       //
-      MENU_ITEM(function, MSG_SET_HOME_OFFSETS, lcd_set_home_offsets);
+    //  MENU_ITEM(function, MSG_SET_HOME_OFFSETS, lcd_set_home_offsets);
       //MENU_ITEM(gcode, MSG_SET_ORIGIN, PSTR("G92 X0 Y0 Z0"));
     #endif
 
@@ -3886,7 +3929,7 @@ void kill_screen(const char* lcd_msg) {
         #define _FC_LINES_F __FC_LINES_F
       #endif
       #if LCD_HEIGHT > _FC_LINES_F + 1
-        STATIC_ITEM(" ");
+    //    STATIC_ITEM(" ");
       #endif
       HOTEND_STATUS_ITEM();
       END_SCREEN();

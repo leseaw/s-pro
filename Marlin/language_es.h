@@ -262,4 +262,11 @@
 #define MSG_FILAMENT_CHANGE_HEATING_1       _UxGT("Calentando boquilla")
 #define MSG_FILAMENT_CHANGE_HEATING_2       _UxGT("Espere por favor")
 
+ #ifndef MSG_OUTAGE
+    #define MSG_OUTAGE "Resume from outage"  //断电续打
+ #endif
+  #ifndef MSG_SET   
+    #define  MSG_SET "Setting"    //设定
+ #endif
+
 #endif // LANGUAGE_ES_H

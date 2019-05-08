@@ -32,7 +32,7 @@
 
 // Fallback if no language is set. DON'T CHANGE
 #ifndef LCD_LANGUAGE
-  #define LCD_LANGUAGE en
+  #define LCD_LANGUAGE cn
 #endif
 
 // For character-based LCD controllers (DISPLAY_CHARSET_HD44780)

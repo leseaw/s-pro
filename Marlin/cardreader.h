@@ -34,6 +34,8 @@
 #include "types.h"
 #include "enum.h"
 
+
+
 class CardReader {
 public:
   CardReader();
@@ -86,6 +88,7 @@ public:
   FORCE_INLINE void setIndex(long index) { sdpos = index; file.seekSet(index); }
   FORCE_INLINE uint8_t percentDone() { return (isFileOpen() && filesize) ? sdpos / ((filesize + 99) / 100) : 0; }
   FORCE_INLINE char* getWorkDirName() { workDir.getFilename(filename); return filename; }
+  FORCE_INLINE long GetLastSDpos() {return sdpos;};
 
 public:
   bool saving, logging, sdprinting, cardOK, filenameIsDir;

@@ -168,4 +168,11 @@
 #define MSG_DELTA_CALIBRATE_Z               "Calibrar Z"
 #define MSG_DELTA_CALIBRATE_CENTER          "Calibrar Centro"
 
+ #ifndef MSG_OUTAGE
+    #define MSG_OUTAGE "Resume from outage"  //断电续打
+ #endif
+  #ifndef MSG_SET   
+    #define  MSG_SET "Setting"    //设定
+ #endif
+
 #endif // LANGUAGE_PT_BR_H

@@ -40,22 +40,6 @@
 #define CONFIGURATION_H_VERSION 010100
 
 //===========================================================================
-//============================= Getting Started =============================
-//===========================================================================
-
-/**
- * Here are some standard links for getting your machine calibrated:
- *
- * http://reprap.org/wiki/Calibration
- * http://youtu.be/wAL9d7FgInk
- * http://calculator.josefprusa.cz
- * http://reprap.org/wiki/Triffid_Hunter%27s_Calibration_Guide
- * http://www.thingiverse.com/thing:5573
- * https://sites.google.com/site/repraplogphase/calibration-of-your-reprap
- * http://www.thingiverse.com/thing:298812
- */
-
-//===========================================================================
 //============================= DELTA Printer ===============================
 //===========================================================================
 // For a Delta printer start with one of the configuration files in the
@@ -74,10 +58,10 @@
 // User-specified version info of this build to display in [Pronterface, etc] terminal window during
 // startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
 // build by the user have been successfully uploaded into firmware.
-#define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "(ANYCUBIC FourMax, V1.0)" // Who made the changes.
 #define SHOW_BOOTSCREEN
 #define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
-#define STRING_SPLASH_LINE2 WEBSITE_URL         // will be shown during bootup in line 2
+//#define STRING_SPLASH_LINE2 WEBSITE_URL         // will be shown during bootup in line 2
 
 //
 // *** VENDORS PLEASE READ *****************************************************
@@ -287,7 +271,7 @@
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 1
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
 #define DUMMY_THERMISTOR_998_VALUE 25
@@ -439,7 +423,7 @@
  */
 
 #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
-#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+//#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
 
 //===========================================================================
 //============================= Mechanical Settings =========================
@@ -487,13 +471,13 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
-#define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Y_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define X_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Y_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define X_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Y_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define X_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Y_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
 #define Z_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Z_MIN_PROBE_ENDSTOP_INVERTING false // set to true to invert the logic of the probe.
+//#define Z_MIN_PROBE_ENDSTOP_INVERTING true // set to true to invert the logic of the probe.
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
@@ -524,14 +508,14 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 92.6 }
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 300, 300, 10, 25 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -539,7 +523,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 100, 10000 }
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -549,9 +533,9 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_ACCELERATION          1500    // X, Y, Z and E acceleration for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  2000    // E acceleration for retracts
+#define DEFAULT_TRAVEL_ACCELERATION   1500    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
  * Default Jerk (mm/s)
@@ -561,10 +545,10 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-#define DEFAULT_XJERK                 20.0
-#define DEFAULT_YJERK                 20.0
+#define DEFAULT_XJERK                 11
+#define DEFAULT_YJERK                 11
 #define DEFAULT_ZJERK                  0.4
-#define DEFAULT_EJERK                  5.0
+#define DEFAULT_EJERK                  10.0
 
 //===========================================================================
 //============================= Z Probe Options =============================
@@ -580,7 +564,7 @@
  *
  * Enable this option for a probe connected to the Z Min endstop pin.
  */
-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 
 /**
  * Z_MIN_PROBE_ENDSTOP
@@ -742,7 +726,7 @@
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
 #define INVERT_X_DIR false
-#define INVERT_Y_DIR true
+#define INVERT_Y_DIR false
 #define INVERT_Z_DIR false
 
 // Enable this option for Toshiba stepper drivers
@@ -759,7 +743,7 @@
 
 // @section homing
 
-//#define Z_HOMING_HEIGHT 4  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_HOMING_HEIGHT 0  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
                              // Be sure you have this distance over your Z_MAX_POS in case.
 
 // Direction of endstops when homing; 1=MAX, -1=MIN
@@ -771,16 +755,16 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 200
-#define Y_BED_SIZE 200
+#define X_BED_SIZE 215
+#define Y_BED_SIZE 215
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
+#define X_MIN_POS -5
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 200
+#define Z_MAX_POS 300
 
 // If enabled, axes won't move below MIN_POS in response to movement commands.
 #define MIN_SOFTWARE_ENDSTOPS
@@ -795,9 +779,9 @@
  * For other boards you may need to define FIL_RUNOUT_PIN.
  * By default the firmware assumes HIGH = has filament, LOW = ran out
  */
-//#define FILAMENT_RUNOUT_SENSOR
+#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-  #define FIL_RUNOUT_INVERTING false // set to true to invert the logic of the sensor.
+  #define FIL_RUNOUT_INVERTING true // set to true to invert the logic of the sensor.
   #define ENDSTOPPULLUP_FIL_RUNOUT // Uncomment to use internal pullup for filament runout pins if the sensor is defined.
   #define FILAMENT_RUNOUT_SCRIPT "M600"
 #endif
@@ -994,7 +978,7 @@
 
 // Homing speeds (mm/m)
 #define HOMING_FEEDRATE_XY (50*60)
-#define HOMING_FEEDRATE_Z  (4*60)
+#define HOMING_FEEDRATE_Z  (10*60)
 
 //=============================================================================
 //============================= Additional Features ===========================
@@ -1010,8 +994,8 @@
 // M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 //
-//#define EEPROM_SETTINGS // Enable for M500 and M501 commands
-//#define DISABLE_M503    // Saves ~2700 bytes of PROGMEM. Disable for release!
+#define EEPROM_SETTINGS // Enable for M500 and M501 commands
+#define DISABLE_M503    // Saves ~2700 bytes of PROGMEM. Disable for release!
 #define EEPROM_CHITCHAT   // Give feedback on EEPROM commands. Disable to save PROGMEM.
 
 //
@@ -1021,7 +1005,7 @@
 // every couple of seconds when it can't accept commands.
 //
 #define HOST_KEEPALIVE_FEATURE        // Disable this if your host doesn't like keepalive messages
-#define DEFAULT_KEEPALIVE_INTERVAL 2  // Number of seconds between "busy" messages. Set with M113.
+#define DEFAULT_KEEPALIVE_INTERVAL 4  // Number of seconds between "busy" messages. Set with M113.
 #define BUSY_WHILE_HEATING            // Some hosts require "busy" messages even during heating
 
 //
@@ -1042,12 +1026,12 @@
 // @section temperature
 
 // Preheat Constants
-#define PREHEAT_1_TEMP_HOTEND 180
-#define PREHEAT_1_TEMP_BED     70
+#define PREHEAT_1_TEMP_HOTEND 200
+#define PREHEAT_1_TEMP_BED     50
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
 
 #define PREHEAT_2_TEMP_HOTEND 240
-#define PREHEAT_2_TEMP_BED    110
+#define PREHEAT_2_TEMP_BED    80
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
 /**
@@ -1178,7 +1162,7 @@
  *
  * :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cn':'Chinese', 'cz':'Czech', 'cz_utf8':'Czech (UTF8)', 'de':'German', 'el':'Greek', 'el-gr':'Greek (Greece)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'gl':'Galician', 'hr':'Croatian', 'it':'Italian', 'kana':'Japanese', 'kana_utf8':'Japanese (UTF8)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt-br':'Portuguese (Brazilian)', 'pt-br_utf8':'Portuguese (Brazilian UTF8)', 'pt_utf8':'Portuguese (UTF8)', 'ru':'Russian', 'sk_utf8':'Slovak (UTF8)', 'tr':'Turkish', 'uk':'Ukrainian', 'zh_CN':'Chinese (Simplified)', 'zh_TW':'Chinese (Taiwan)', test':'TEST' }
  */
-#define LCD_LANGUAGE en
+//#define LCD_LANGUAGE cn
 
 /**
  * LCD Character Set
@@ -1224,7 +1208,7 @@
  * you must uncomment the following option or it won't work.
  *
  */
-//#define SDSUPPORT
+#define SDSUPPORT
 
 /**
  * SD CARD: SPI SPEED
@@ -1304,8 +1288,8 @@
 // Note: Test audio output with the G-Code:
 //  M300 S<frequency Hz> P<duration ms>
 //
-//#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 100
-//#define LCD_FEEDBACK_FREQUENCY_HZ 1000
+#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 70
+#define LCD_FEEDBACK_FREQUENCY_HZ 4000
 
 //
 // CONTROLLER TYPE: Standard
@@ -1376,7 +1360,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // MakerLab Mini Panel with graphic
@@ -1638,7 +1622,7 @@
  */
 //#define FILAMENT_WIDTH_SENSOR
 
-#define DEFAULT_NOMINAL_FILAMENT_DIA 3.00   // (mm) Diameter of the filament generally used (3.0 or 1.75mm), also used in the slicer. Used to validate sensor reading.
+#define DEFAULT_NOMINAL_FILAMENT_DIA 1.75   // (mm) Diameter of the filament generally used (3.0 or 1.75mm), also used in the slicer. Used to validate sensor reading.
 
 #if ENABLED(FILAMENT_WIDTH_SENSOR)
   #define FILAMENT_SENSOR_EXTRUDER_NUM 0    // Index of the extruder that has the filament sensor (0,1,2,3)

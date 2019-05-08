@@ -177,4 +177,11 @@
 #define MSG_DELTA_CALIBRATE_Z               _UxGT("Βαθμονόμηση Z")
 #define MSG_DELTA_CALIBRATE_CENTER          _UxGT("Βαθμονόμηση κέντρου")
 
+ #ifndef MSG_OUTAGE
+    #define MSG_OUTAGE "Resume from outage"  //断电续打
+ #endif
+  #ifndef MSG_SET   
+    #define  MSG_SET "Setting"    //设定
+ #endif
+
 #endif // LANGUAGE_EL_GR_H
