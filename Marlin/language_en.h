@@ -166,7 +166,7 @@
   #define MSG_EDITING_STOPPED                 _UxGT("Mesh Editing Stopped")
 #endif
 #ifndef MSG_USER_MENU
-  #define MSG_USER_MENU                       _UxGT("Custom Commands")
+  #define MSG_USER_MENU                       _UxGT("Bed Leveling")
 #endif
 
 #ifndef MSG_UBL_DOING_G29
