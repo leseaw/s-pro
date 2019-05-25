@@ -50,3 +50,23 @@
 #endif
 
 #include "pins_RAMPS.h"
+
+
+
+// Tevos Pinouts for LCD-board
+#define BEEPER_PIN        37 //42
+
+#define DOGLCD_A0         27 //44
+#define DOGLCD_CS         25 //66
+
+#define BTN_EN1           31 //40
+#define BTN_EN2           33 //63
+#define BTN_ENC           35 //59
+
+// switch X to E1 Motor
+#define X_STEP_PIN         36
+#define X_DIR_PIN          34
+#define X_ENABLE_PIN       30
+#ifndef X_CS_PIN
+  #define X_CS_PIN         44
+#endif
