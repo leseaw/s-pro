@@ -88,12 +88,12 @@
 //
 // Steppers
 //
-#define X_STEP_PIN         54
-#define X_DIR_PIN          55
-#define X_ENABLE_PIN       38
-#ifndef X_CS_PIN
+//#define X_STEP_PIN         54
+//#define X_DIR_PIN          55
+//#define X_ENABLE_PIN       38
+//#ifndef X_CS_PIN
   #define X_CS_PIN         53
-#endif
+//#endif
 
 #define Y_STEP_PIN         60
 #define Y_DIR_PIN          61
@@ -161,31 +161,31 @@
    * Software serial
    */
 
-  #define X_SERIAL_TX_PIN    40
-  #define X_SERIAL_RX_PIN    63
-  #define X2_SERIAL_TX_PIN   -1
-  #define X2_SERIAL_RX_PIN   -1
-
-  #define Y_SERIAL_TX_PIN    59
-  #define Y_SERIAL_RX_PIN    64
-  #define Y2_SERIAL_TX_PIN   -1
-  #define Y2_SERIAL_RX_PIN   -1
-
-  #define Z_SERIAL_TX_PIN    42
-  #define Z_SERIAL_RX_PIN    65
-  #define Z2_SERIAL_TX_PIN   -1
-  #define Z2_SERIAL_RX_PIN   -1
-
-  #define E0_SERIAL_TX_PIN   44
-  #define E0_SERIAL_RX_PIN   66
-  #define E1_SERIAL_TX_PIN   -1
-  #define E1_SERIAL_RX_PIN   -1
-  #define E2_SERIAL_TX_PIN   -1
-  #define E2_SERIAL_RX_PIN   -1
-  #define E3_SERIAL_TX_PIN   -1
-  #define E3_SERIAL_RX_PIN   -1
-  #define E4_SERIAL_TX_PIN   -1
-  #define E4_SERIAL_RX_PIN   -1
+  //#define X_SERIAL_TX_PIN    40
+  //#define X_SERIAL_RX_PIN    63
+  //#define X2_SERIAL_TX_PIN   -1
+  //#define X2_SERIAL_RX_PIN   -1
+//
+  //#define Y_SERIAL_TX_PIN    59
+  //#define Y_SERIAL_RX_PIN    64
+  //#define Y2_SERIAL_TX_PIN   -1
+  //#define Y2_SERIAL_RX_PIN   -1
+//
+  //#define Z_SERIAL_TX_PIN    42
+  //#define Z_SERIAL_RX_PIN    65
+  //#define Z2_SERIAL_TX_PIN   -1
+  //#define Z2_SERIAL_RX_PIN   -1
+//
+  //#define E0_SERIAL_TX_PIN   44
+  //#define E0_SERIAL_RX_PIN   66
+  //#define E1_SERIAL_TX_PIN   -1
+  //#define E1_SERIAL_RX_PIN   -1
+  //#define E2_SERIAL_TX_PIN   -1
+  //#define E2_SERIAL_RX_PIN   -1
+  //#define E3_SERIAL_TX_PIN   -1
+  //#define E3_SERIAL_RX_PIN   -1
+  //#define E4_SERIAL_TX_PIN   -1
+  //#define E4_SERIAL_RX_PIN   -1
 #endif
 
 //
@@ -513,12 +513,12 @@
 
     #elif ENABLED(MINIPANEL)
 
-      #define BEEPER_PIN        42
+      //#define BEEPER_PIN        42
       // not connected to a pin
-      #define LCD_BACKLIGHT_PIN 65   // backlight LED on A11/D65
+      //#define LCD_BACKLIGHT_PIN 65   // backlight LED on A11/D65
 
-      #define DOGLCD_A0         44
-      #define DOGLCD_CS         66
+      //#define DOGLCD_A0         44
+      //#define DOGLCD_CS         66
 
       // GLCD features
       //#define LCD_CONTRAST   190
@@ -527,12 +527,12 @@
       //#define LCD_SCREEN_ROT_180
       //#define LCD_SCREEN_ROT_270
 
-      #define BTN_EN1           40
-      #define BTN_EN2           63
-      #define BTN_ENC           59
+      //#define BTN_EN1           40
+      //#define BTN_EN2           63
+      //#define BTN_ENC           59
 
       #define SD_DETECT_PIN     49
-      #define KILL_PIN          64
+      //#define KILL_PIN          64
 
     #elif ENABLED(ZONESTAR_LCD)
 

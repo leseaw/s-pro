@@ -70,3 +70,17 @@
 #ifndef X_CS_PIN
   #define X_CS_PIN         44
 #endif
+
+#if HAS_DRIVER(TMC2208)
+  #define X_SERIAL_TX_PIN    42
+  #define X_SERIAL_RX_PIN    65
+
+  #define Y_SERIAL_TX_PIN    44
+  #define Y_SERIAL_RX_PIN    60
+
+  #define Z_SERIAL_TX_PIN    59
+  #define Z_SERIAL_RX_PIN    64
+
+  #define E0_SERIAL_TX_PIN   40
+  #define E0_SERIAL_RX_PIN   63
+#endif
